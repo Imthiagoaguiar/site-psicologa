@@ -3,29 +3,44 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-# --- BLOCO DE SEGURANÇA (Radiografia) ---
-# Isso vai aparecer nos logs do Render para a gente ver o que tem lá
+# --- BLOCO DE RADIOGRAFIA (DEBUG) ---
 print("--- INICIANDO RADIOGRAFIA ---")
-print("Diretório atual de trabalho:", os.getcwd())
 try:
-    print("Arquivos na pasta raiz:", os.listdir())
-    if 'templates' in os.listdir():
+    print("Diretório atual:", os.getcwd())
+    arquivos = os.listdir()
+    print("Arquivos na raiz:", arquivos)
+    
+    if 'templates' in arquivos:
         print("Arquivos DENTRO de templates:", os.listdir('templates'))
     else:
-        print("ALERTA: A pasta 'templates' NÃO foi encontrada na raiz!")
+        print("ALERTA: A pasta 'templates' NÃO existe aqui!")
+except Exception as e:
+    print(f"ERRO NA RADIOGRAFIA: {e}")
 print("--- FIM DA RADIOGRAFIA ---")
-# ----------------------------------------
+# ------------------------------------
 
-# Dados da Psicóloga (Seu dicionário continua aqui...)
+# Seus dados originais
 dados_psicologa = {
     'nome': 'Dra. Alessandra Moreira',
-        "crp": "06/12345"
-    }
-    return render_template('index.html', dados=dados_psicologa)
+    'crp': '08/12345',
+    'telefone': '5541999999999',
+    'instagram': '@dra.alessandra',
+    'especialidades': [
+        'Ansiedade e Pânico',
+        'Terapia de Casal',
+        'Depressão',
+        'Autoestima'
+    ],
+    'sobre_mim': """
+    Sou psicóloga clínica com abordagem em Terapia Cognitivo-Comportamental.
+    Meu objetivo é ajudar você a encontrar equilíbrio emocional e autoconhecimento
+    em um ambiente acolhedor e seguro.
+    """
+}
 
-# Rota Sobre Mim
 @app.route('/')
 def home():
+    # O Flask procura automaticamente dentro da pasta 'templates'
     return render_template('index.html', dados=dados_psicologa)
 
 if __name__ == '__main__':
